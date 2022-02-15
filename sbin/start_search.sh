@@ -1,2 +1,2 @@
-CUDA_VISIBLE_DEVICES=5 python -u /usr/local/bin/gunicorn --workers=4 --bind=0.0.0.0:33366 server.tree_search_beamsearch:app --worker-class sanic.worker.GunicornWorker --timeout 6000000  &
-python -m server.aggregate_search &
+CUDA_VISIBLE_DEVICES=4 python -u /usr/local/bin/gunicorn --workers=4 --bind=0.0.0.0:61177 server.keyword_server:app --worker-class sanic.worker.GunicornWorker --timeout 6000000  &
+python -m server.prompt_word_server &

@@ -1,5 +1,7 @@
+import re
 from jieba import posseg as pseg
 from config.project_config import good_word_path
+
 not_start_pos = ["uj", "c", "p"]
 
 

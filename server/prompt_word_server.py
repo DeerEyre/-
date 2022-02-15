@@ -1,8 +1,30 @@
+import logging
+import logging.handlers
+
 import requests
 import json
 import jsonlines
+from config.project_config import top1B_path
 from sanic import Sanic
 from sanic.response import json as sanic_json
+import time
+
+formatter = logging.Formatter(fmt='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                              datefmt='%Y-%m-%d %H:%M:%S')
+rf_handler = logging.handlers.TimedRotatingFileHandler(filename="logs/prompt_server.log", when='D', interval=7,
+                                                       backupCount=60)
+
+logger_prompt = logging.getLogger("prompt_keyword")
+logger_prompt.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+ch.setFormatter(formatter)
+rf_handler.setFormatter(formatter)
+
+logger_prompt.addHandler(ch)
+logger_prompt.addHandler(rf_handler)
+
+logger_prompt.info("start")
 
 
 def get_generate_keywords(text, num=1):
@@ -92,7 +114,7 @@ app = Sanic(__name__)
 @app.route("/prompt", methods=['POST'])
 async def reductions(request):
     jsonDic = request.json
-    print("输入->" + str(jsonDic))
+    logger_prompt.info("输入->%s" % str(jsonDic))
 
     try:
         title = jsonDic["title"]
@@ -114,33 +136,43 @@ async def reductions(request):
     except KeyError:
         num = 10
 
-    prompt_keyword = prompt_word(title=title, outlinetitle=outlinetitle, content=content, max_len=num)
+    try:
+        prompt_keyword = prompt_word(title=title, outlinetitle=outlinetitle, content=content, max_len=num)
+        prompt_keyword = {"code": 0, "msg": "success", "data": {"prompt_keyword": prompt_keyword}, "time": int(time.time())}
+    except Exception as ex:
+        logger_prompt.error(ex)
+        prompt_keyword = {"code": 0, "msg": "null", "data": {}, "time": int(time.time())}
 
-    return sanic_json({"prompt_keyword": prompt_keyword, "code": 1})
+    logger_prompt.info("输出->%s" % str(prompt_keyword))
+    return sanic_json(prompt_keyword)
 
 
 @app.route("/words", methods=['POST'])
 async def words(request):
     jsonDic = request.json
-    print("输入->" + str(jsonDic))
+    logger_prompt.info("输入->%s" % str(jsonDic))
 
     try:
         word = jsonDic["word"]
     except Exception:
-        return sanic_json({"code": -1, "info": "输入有误"})
+        return sanic_json({"code": -1, "msg": "输入错误", "data": {}, "time": int(time.time())})
 
-    prompt_keyword = word_to_prompt_words(word)
+    try:
+        prompt_keyword = word_to_prompt_words(word)
+        prompt_keyword = {"code": 0, "msg": "success", "data": {"prompt_keyword": prompt_keyword}, "time": int(time.time())}
 
-    return sanic_json({"prompt_keyword": prompt_keyword, "code": 1})
+    except Exception as ex:
+        logger_prompt.error(ex)
+        prompt_keyword = {"code": 0, "msg": "null", "data": {}, "time": int(time.time())}
+
+    return sanic_json(prompt_keyword)
 
 
 if __name__ == '__main__':
 
-    top1B_path = "/data/cged/data/top1B.dic"
     top1B = {}
     with open(top1B_path, "r") as r:
         read = r.read()
-
         for w in read.split("\n"):
             if len(w) > 1:
                 w = w.split("\t")
