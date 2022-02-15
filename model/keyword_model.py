@@ -5,8 +5,9 @@ import random
 import re
 from model.tokenization_unilm import UnilmTokenizer
 from config.project_config import tokenizer_path
+from utils.utils_words import *
 
-
+max_src_length = 512 - 2 - 200
 tokenizer = UnilmTokenizer.from_pretrained(tokenizer_path)
 bi_uni_pipeline = [utils_seq2seq.Preprocess4Seq2seqDecode(list(tokenizer.vocab.keys()),
                                                           tokenizer.convert_tokens_to_ids,

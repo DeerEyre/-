@@ -1,5 +1,5 @@
 from jieba import posseg as pseg
-from config.project_config import top1B_path
+from config.project_config import good_word_path
 not_start_pos = ["uj", "c", "p"]
 
 
@@ -103,7 +103,7 @@ def keyword_en(title):
 
 def load_good_word():
     word_dict = {}
-    with open(top1B_path, "r", encoding="utf-8") as read:
+    with open(good_word_path, "r", encoding="utf-8") as read:
         raw_data = read.read()
         for line_data in raw_data.split("\n"):
             w2f = line_data.split(" : ")

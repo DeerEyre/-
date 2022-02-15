@@ -6,15 +6,15 @@ import copy
 from config.project_config import *
 from sanic import Sanic
 from sanic.response import json as sanic_json
+from model.tokenization_unilm import UnilmTokenizer
+from model.modeling_unilm import UnilmForSeq2SeqDecode, UnilmConfig
 
-import load_file as load_file
 import model.keyword_model as keyword
 import time
 
 app = Sanic("keywords")
 
 device = torch.device(cuda if torch.cuda.is_available() else "cpu")
-max_src_length = 512 - 2 - 200
 mask_word_id, eos_word_ids, sos_word_id = 103, 102, 100
 
 config = UnilmConfig.from_pretrained(model_config_path, max_position_embeddings=512)
@@ -25,8 +25,8 @@ print("读取字典信息完成")
 
 
 print("开始读取关键词模型")
-model_keyword = UnilmForSeq2SeqDecode.from_pretrained(config_path.Model_Keyword,
-                                                      state_dict=torch.load(config_path.Model_Keyword, map_location="cpu"),
+model_keyword = UnilmForSeq2SeqDecode.from_pretrained(model_path,
+                                                      state_dict=torch.load(model_path, map_location="cpu"),
                                                       config=config,
                                                       mask_word_id=mask_word_id,
                                                       search_beam_size=1,
