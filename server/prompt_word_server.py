@@ -33,7 +33,7 @@ def get_generate_keywords(text, num=1):
         返回 提取的关键词、生成的关键词
     """
 
-    url = "http://192.168.6.247:61177/tree_keywords"
+    url = "http://127.0.0.1:61177/tree_keywords"
 
     payload = {"title": text, "num": num}
     headers = {
