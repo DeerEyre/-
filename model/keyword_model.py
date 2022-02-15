@@ -146,9 +146,10 @@ def output_format(unilm_model, batch_context, batch_size, device_, penalty_facto
             input_ids, token_type_ids, position_ids, input_mask = batch
             traces = generate_step(unilm_model, input_ids, token_type_ids, position_ids,
                                    input_mask, topk, penalty_factor).tolist()
+
             [outputs.append(tokenizer.decode(t)) for t in traces]
 
-    return [j.replace(" ", "") for j in [i.split("[SEP]")[0] for i in outputs]]
+    return [j.replace(" ", "") for j in [i[0] for i in outputs]]
 
 
 def generate_keyword(title, num, model, device_, word_dict_):

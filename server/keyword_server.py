@@ -57,7 +57,7 @@ async def title_words(request):
     except Exception:
         num = 1
 
-    out = keyword.generate_keyword(title, num,
+    out = keyword.generate_keyword(title, num=num,
                                    model=model_keyword,
                                    device_=device,
                                    word_dict_=word_dict)
