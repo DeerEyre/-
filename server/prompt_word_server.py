@@ -3,7 +3,6 @@ import logging.handlers
 
 import requests
 import json
-import jsonlines
 from config.project_config import top1B_path
 from sanic import Sanic
 from sanic.response import json as sanic_json
