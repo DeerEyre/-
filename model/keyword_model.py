@@ -15,6 +15,7 @@ bi_uni_pipeline = [utils_seq2seq.Preprocess4Seq2seqDecode(list(tokenizer.vocab.k
 
 
 def generate_step(model, input_ids, token_type_ids, position_ids, attention_mask, top_k=5, penalty_factor=1):
+    """模型预测， 特殊id处理， 重复的惩罚"""
     input_shape = list(input_ids.size())
     batch_size = input_shape[0]
     input_length = input_shape[1]
@@ -124,6 +125,7 @@ def generate_step(model, input_ids, token_type_ids, position_ids, attention_mask
 
 
 def output_format(unilm_model, batch_context, batch_size, device_, penalty_factor=1, topk=5):
+    """输出数据的解析"""
     next_i = 0
     outputs = []
     input_lines = [tokenizer.tokenize(c)[:max_src_length] for c in batch_context]
@@ -153,6 +155,7 @@ def output_format(unilm_model, batch_context, batch_size, device_, penalty_facto
 
 
 def generate_keyword(title, num, model, device_, word_dict_):
+    """输入数据的加工， 提取专业词， 提取英文"""
     titles = [title for _ in range(num * 2)]
     output_keyword = output_format(unilm_model=model,
                                    batch_context=titles,

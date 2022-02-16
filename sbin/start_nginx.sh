@@ -1,1 +1,1 @@
-nginx -c /data/semantic-search/config/ngconf/nginx.conf &
+nginx -c /data/keyword-prompt/config/ngconf/nginx.conf &

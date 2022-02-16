@@ -177,4 +177,4 @@ if __name__ == '__main__':
                 w = w.split("\t")
                 top1B[w[0]] = int(w[-1])
 
-    app.run(host="0.0.0.0", port=51677, workers=4)
+    app.run(host="0.0.0.0", port=51678, workers=4)
