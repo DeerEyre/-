@@ -5,7 +5,7 @@
     ```
     docker pull harbor.laibokeji.com/aiserver/semantic-search-and-keyword:v1.0
     ```
-2. 启动docker容器 (默认进入容器，退出会自动停止运行)
+2. 启动docker容器 (默认进入容器，第一次退出会自动停止运行)
    ```
    docker run --gpus all --shm-size 4g --name keyword-prompt --net host -it -v [共享目录]:/data harbor.laibokeji.com/aiserver/semantic-search-and-keyword:v1.0 bash
    ```
