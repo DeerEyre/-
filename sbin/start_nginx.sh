@@ -1,1 +1,1 @@
-nginx -c /data/keyword-prompt/config/ngconf/nginx.conf &
+nginx -c /data/keyword-extraction/config/ngconf/nginx.conf &
